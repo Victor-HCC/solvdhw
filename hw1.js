@@ -15,7 +15,15 @@ String.prototype.plus = function (str) {
     i -= 1;
     j -= 1;
   }
-  return carry ? String(carry).concat(sum.join('')) : String(parseInt(sum.join('')));
+  let aux = 0
+  for(let i = 0; i < sum.length; i++) {
+    if(parseInt(sum[i]) != 0) {
+      break;
+    }
+    aux += 1;
+  }
+  sum = sum.slice(aux)
+  return carry ? String(carry).concat(sum.join('')) : String(sum.join(''));
 };
 
 String.prototype.greater = function (str) {
@@ -97,7 +105,7 @@ String.prototype.multiply = function (str) {
     result = result.plus(round.join(''))
   }
 
-  return String(parseInt(result))
+  return String(result)
 };
 
 String.prototype.divide = function (str) {
@@ -157,4 +165,3 @@ String.prototype.divide = function (str) {
     return smallDivide(this, str)
   }
 };
-
