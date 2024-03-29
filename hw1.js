@@ -1,3 +1,19 @@
+String.prototype.removeLeadingZeros = function () {
+
+  if(this.split('').every(elem => parseInt(elem) === 0)) return '0';
+
+  let aux = 0
+  let thisAux = this
+  for(let i = 0; i < thisAux.length; i++) {
+    if(parseInt(thisAux[i]) != 0) {
+      break;
+    }
+    aux += 1;
+  }
+  thisAux = thisAux.slice(aux)
+  return thisAux
+}
+
 String.prototype.plus = function (str) {
   let i = this.length - 1
   let j = str.length - 1
@@ -15,25 +31,21 @@ String.prototype.plus = function (str) {
     i -= 1;
     j -= 1;
   }
-  let aux = 0
-  for(let i = 0; i < sum.length; i++) {
-    if(parseInt(sum[i]) != 0) {
-      break;
-    }
-    aux += 1;
-  }
-  sum = sum.slice(aux)
-  return carry ? String(carry).concat(sum.join('')) : String(sum.join(''));
+  sum = sum.join('')
+  return carry ? String(carry).concat(sum).removeLeadingZeros() : sum.removeLeadingZeros();
 };
 
 String.prototype.greater = function (str) {
-  if(String(parseInt(this)).length > str.length) {
+  let thisAux = this.removeLeadingZeros()
+  let strAux = str.removeLeadingZeros()
+  
+  if(thisAux.length > strAux.length) {
     return true
-  } else if(this.length === str.length) {
-    for(let i = 0; i < this.length; i++) {
-      if(parseInt(this[i]) < parseInt(str[i])) {
+  } else if(thisAux.length === strAux.length) {
+    for(let i = 0; i < thisAux.length; i++) {
+      if(parseInt(thisAux[i]) < parseInt(strAux[i])) {
         return false
-      } else if(parseInt(this[i]) > parseInt(str[i])) {
+      } else if(parseInt(thisAux[i]) > parseInt(strAux[i])) {
         return true
       }
     }
@@ -70,11 +82,12 @@ String.prototype.minus = function (str) {
     i -= 1;
     j -= 1;
   }
-
-  return String(parseInt(result.join('')));
+  return result.join('').removeLeadingZeros();
 };
 
-String.prototype.multiply = function (str) { 
+String.prototype.multiply = function (str) {
+  if(this.removeLeadingZeros() === '0' || str.removeLeadingZeros() === '0') return '0';
+
   let a = this.split('')
   let b = str.split('')
   let carry = 0
@@ -99,16 +112,18 @@ String.prototype.multiply = function (str) {
         carry = 0
       }
     }
-    
     k += 1
 
     result = result.plus(round.join(''))
   }
 
-  return String(result)
+  return result
 };
 
 String.prototype.divide = function (str) {
+  if(str.removeLeadingZeros() === '0') return "It's not possible to divide by zero";
+  if(str.removeLeadingZeros() === '1') return this.removeLeadingZeros();
+
   function smallDivide(str1, str2) {
     let cont = 0
     let dividend = str1
@@ -120,7 +135,7 @@ String.prototype.divide = function (str) {
     if(String(dividend) === str2) {
       cont += 1
     }
-    return cont
+    return String(cont)
   }
 
 
@@ -128,7 +143,6 @@ String.prototype.divide = function (str) {
     let length2 = str.length
 
     let position = length2
-
     let portion = this.slice(0, length2)
     
     if(!(portion === str) && !portion.greater(str)) {
@@ -142,26 +156,25 @@ String.prototype.divide = function (str) {
     while((portion === str) || portion.greater(str) || this.length >= position) {
       portion = String(parseInt(portion))
       step = smallDivide(portion, str)
-
       if(parseInt(step) != 0) {
+        
         if(str.multiply(String(step)) === portion) {
           portion = '0'
         } else {
           portion = portion.minus(str.multiply(String(step)))
         }
       }
-
       result.push(step)
-
-      if(this[position] || position === this.length) {
+      if(this[position]) {
         portion = portion.concat(this[position])
-        position += 1
       }
+      position += 1
     }
 
-    return result.join('')
+    return result.join('').removeLeadingZeros()
 
   } else {
-    return smallDivide(this, str)
+    if(str.greater(this)) return '0'
+    return smallDivide(this, str).removeLeadingZeros()
   }
 };
