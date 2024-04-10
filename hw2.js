@@ -11,6 +11,12 @@ const addValues = (arg1, arg2) => {
         return arg1 + arg2
       case 'bigint':
         return arg1 + arg2
+      case 'object':
+        if(Array.isArray(arg1) && Array.isArray(arg1) && arg1.length === arg2.length) {
+          let value = arg1.map((item, index) => item + arg2[index])
+          return value
+        }
+        throw new Error('Addition is not possible with the provided arguments');
       default:
         throw new Error('Addition is not possible with the provided arguments');
     }
@@ -49,7 +55,10 @@ const convertToNumber = (arg) => {
     case 'boolean':
       return Number(arg)
     case 'bigint':
-      return BigInt(arg)
+      if(arg >= Number.MIN_SAFE_INTEGER && arg <= Number.MAX_SAFE_INTEGER) {
+        return Number(arg)
+      }
+      throw new Error("Can't be converted to a number")
     default:
       throw new Error("Can't be converted to a number")
   }
@@ -70,13 +79,14 @@ const coerceToType = (arg, type) => {
     case 'boolean':
       return Boolean(arg)
     case 'bigint':
-      const value = BigInt(arg)
-      if(!Number.isFinite(value)) throw new Error("Can't coerce to bigint")
-      return value
+      try {
+        return BigInt(arg);
+      } catch (error) {
+        throw new Error(error.message);
+      }
     default:
       throw new Error("The value can't be converted to the specified type")
   }
 }
-
 
 module.exports = { addValues, stringifyValue, convertToNumber, invertBoolean, coerceToType }
