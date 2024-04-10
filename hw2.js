@@ -73,11 +73,11 @@ const invertBoolean = (arg) => {
 const coerceToType = (arg, type) => {
   switch(type) {
     case 'string':
-      return String(arg)
+      return stringifyValue(arg)
     case 'number':
-      return Number(arg)
+      return convertToNumber(arg)
     case 'boolean':
-      return Boolean(arg)
+      return convertToBoolean(arg)
     case 'bigint':
       try {
         return BigInt(arg);
@@ -89,4 +89,6 @@ const coerceToType = (arg, type) => {
   }
 }
 
-module.exports = { addValues, stringifyValue, convertToNumber, invertBoolean, coerceToType }
+const convertToBoolean = (arg) => !!arg
+
+module.exports = { addValues, stringifyValue, convertToNumber, invertBoolean, coerceToType, convertToBoolean }
