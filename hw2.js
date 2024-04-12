@@ -6,13 +6,19 @@ const addValues = (arg1, arg2) => {
   if(typeof(arg1) === typeof(arg2)) {
     switch(type) {
       case 'number':
+        if(isNaN(arg1) || isNaN(arg2)) {
+          throw new Error('Addition is not possible with the provided arguments');
+        }
         return arg1 + arg2
       case 'string':
         return arg1 + arg2
       case 'bigint':
         return arg1 + arg2
-      case 'object':
+      case 'object': // case for vectorial addition
         if(Array.isArray(arg1) && Array.isArray(arg1) && arg1.length === arg2.length) {
+          if(arg1.some(item => typeof(item) != 'number') || arg2.some(item => typeof(item) != 'number')) {
+            throw new Error('All elements of the arrays have to be numbers');
+          }
           let value = arg1.map((item, index) => item + arg2[index])
           return value
         }
@@ -90,5 +96,22 @@ const coerceToType = (arg, type) => {
 }
 
 const convertToBoolean = (arg) => !!arg
+
+const arrayToObject = (arg) => {
+  if(Array.isArray(arg)) {
+    return arg.map((item, index) => {
+      return {
+        [index]: item
+      }
+    })
+  }
+  throw new Error('The argument is not an array')
+}
+
+const nowDateToNumber = () => {
+  const value = new Date()
+  console.log(value);
+  return +value
+}
 
 module.exports = { addValues, stringifyValue, convertToNumber, invertBoolean, coerceToType, convertToBoolean }
