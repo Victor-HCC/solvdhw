@@ -14,22 +14,12 @@ const addValues = (arg1, arg2) => {
         return arg1 + arg2
       case 'bigint':
         return arg1 + arg2
-      case 'object': // case for vectorial addition
-        if(Array.isArray(arg1) && Array.isArray(arg1) && arg1.length === arg2.length) {
-          if(arg1.some(item => typeof(item) != 'number') || arg2.some(item => typeof(item) != 'number')) {
-            throw new Error('All elements of the arrays have to be numbers');
-          }
-          let value = arg1.map((item, index) => item + arg2[index])
-          return value
-        }
-        throw new Error('Addition is not possible with the provided arguments');
       default:
         throw new Error('Addition is not possible with the provided arguments');
     }
   } else {
     throw new Error('Incompatible types for addition');
   }
-
 }
 
 const stringifyValue = (arg) => {
@@ -40,7 +30,6 @@ const stringifyValue = (arg) => {
     return String(arg)
   }
 }
-
 
 const convertToNumber = (arg) => {
   if(arg === null) return Number(arg)
@@ -110,8 +99,7 @@ const arrayToObject = (arg) => {
 
 const nowDateToNumber = () => {
   const value = new Date()
-  console.log(value);
   return +value
 }
 
-module.exports = { addValues, stringifyValue, convertToNumber, invertBoolean, coerceToType, convertToBoolean }
+module.exports = { addValues, stringifyValue, convertToNumber, invertBoolean, coerceToType, convertToBoolean, arrayToObject, nowDateToNumber }
