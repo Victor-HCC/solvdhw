@@ -21,9 +21,10 @@ function getFullName(person) {
   return `${person.firstName} ${person.lastName}`
 }
 
-const splitWords = string => string.split(' ')
+const regexWords = /\b\w+(?:'\w+)?\b/g
+const splitWords = string => string.trim().toLowerCase().split(' ').filter(word => regexWords.test(word))
 const uniqueWords = words => Array.from(new Set(words))
-const sortAlphabetically = words => words.sort((a, b) => a.toLowerCase().localeCompare(b.toLowerCase()))
+const sortAlphabetically = words => words.sort()
 const filterUniqueWords = string => sortAlphabetically(uniqueWords(splitWords(string)))
 
 const arrayAverage = array => array.reduce((total, item) => item + total, 0) / array.length
