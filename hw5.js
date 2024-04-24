@@ -1,15 +1,14 @@
 // Task 1
 
 const customFilterUnique = function(arr, cb) {
-  const uniqueElements = []
+  const counts = {}
 
   arr.forEach(item => {
-    if(!uniqueElements.some(unique => cb(unique, item))) {
-      uniqueElements.push(item)
-    }
+    const prop = cb(item)
+    counts[prop] = (counts[prop] || 0) + 1
   })
 
-  return uniqueElements
+  return arr.filter(item => counts[cb(item)] === 1)
 }
 
 const persons = [
@@ -23,7 +22,7 @@ const persons = [
   { name: 'Cassie', age: 20 }
 ]
 
-const sameName = (a, b) => a.name === b.name
+const sameName = a => a.name
 const uniquePersons = customFilterUnique(persons, sameName)
 console.log(uniquePersons)
 
