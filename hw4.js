@@ -114,17 +114,20 @@ const personImmutable = createImmutableObject(person)
 // Task 5
 
 const observeObject = function(obj, cb) {
-  const proxy = new Proxy(obj, {
-    get(target, property) {
-      cb(property, 'get');
-      return target[property]
-    },
-    set(target, property, value) {
-      cb(property, 'set')
-      target[property] = value
-      return true
-    }
-  });
+  const proxy = {}
+
+  for(let prop in obj) {
+    Object.defineProperty(proxy, prop, {
+      get: function() {
+        cb(prop, 'get');
+        return obj[prop]
+      },
+      set: function(value) {
+        cb(prop, 'set')
+        obj[prop] = value
+      }
+    })
+  }
 
   return proxy
 }
