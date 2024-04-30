@@ -61,7 +61,7 @@ const highlighted = highlightKeywords(template, keywords);
 // Task 3
 
 function multiline(template) {
-	let lines = template[0].split('\n').filter(item => item !== '')
+	let lines = template[0].trim().split('\n')
 	let result = ''
 
 	for(let i = 1; i <= lines.length; i++) {
@@ -148,3 +148,30 @@ const step2 = step1(3); // Returns a curried function
 const result = step2(4); // Returns the final result: 2 * 3 * 4 = 24
 
 // console.log("Result:", result); // Expected: 24
+
+
+// ### **Challenge *(optional)***
+
+const extendCurry = function(func) {
+  return function curried(...args) {
+    const placeholders = args.includes('_')
+
+		if(args.length === func.length && !placeholders) {
+			return func(...args)
+		}
+
+		return function(...next) {
+			const combinedArgs = args.map(arg => arg === '_' ? next.shift() : arg).concat(next);
+			return curried(...combinedArgs)
+		}
+  }
+}
+
+const ExtendCurriedMultiply = extendCurry(multiply);
+
+let stepA = ExtendCurriedMultiply('_')
+let stepB = stepA('_')
+let addMissingArgs = stepB(4)
+let stepC = addMissingArgs(2)
+let result2 = stepC(3)
+// console.log("Result:", result2); // Expected: 24
