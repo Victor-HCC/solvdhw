@@ -466,3 +466,68 @@ console.log(bestBookstore.searchByTitle('1984'));
 console.log(bestBookstore.searchByTitle('Misery'));
 console.log(bestBookstore.searchByISBN('9781408855652'));
 console.log(bestBookstore.searchByISBN('9781408855654'));
+
+
+
+/**
+ * Interaction with the database
+ */
+
+const { Book: BookModel, User: UserModel, synchronizeDatabase } = require('./db')
+
+/**
+ * Creates a new book entry in the database.
+ * @async
+ * @param {Object} bookObject - An object representing the book to be created.
+ * @param {string} bookObject.title - The title of the book.
+ * @param {string} bookObject.author - The author of the book.
+ * @param {string} bookObject.isbn - The ISBN of the book.
+ * @param {number} bookObject.price - The price of the book.
+ * @param {boolean} bookObject.availability - The availability status of the book.
+ * @param {number} bookObject.pages - The number of pages in the book.
+ * @param {string} bookObject.language - The language of the book.
+ * @param {string} bookObject.genre - The genre of the book.
+ * @returns {Promise<Object>} A promise that resolves to the newly created book object.
+ */
+const createBook = async (bookObject) => {
+  const { title, author, isbn, price, availability, pages, language, genre } = bookObject
+  const newBook = await BookModel.create({title, author, isbn, price, availability, pages, language, genre})
+  return newBook
+}
+
+/**
+ * Creates a new user entry in the database.
+ * @async
+ * @param {Object} userObject - An object representing the user to be created.
+ * @param {number} userObject.id - The id of the user.
+ * @param {string} userObject.name - The name of the user.
+ * @param {string} userObject.email - The email of the user.
+ * @returns {Promise<Object>} A promise that resolves to the newly created user object.
+ */
+const createUser = async (userObject) => {
+  const { id, name, email } = userObject
+  const newUser = await UserModel.create({id, name, email})
+  return newUser
+}
+
+/**
+ * Synchronizes the database with the defined models and performs database operations.
+ * @returns {Promise<void>} A promise indicating the completion of the database synchronization process.
+ */
+synchronizeDatabase()
+  .then(async () => {
+    // Example: Creating a new book
+    const newBookInDB = await createBook(book1)
+    console.log(newBookInDB.dataValues);
+
+    // Example: Creating a new user
+    const newUserInDB1 = await createUser(karl)
+    console.log(newUserInDB1.dataValues);
+
+    // Example: Creating another new user
+    const newUserInDB2 = await createUser(john)
+    console.log(newUserInDB2.dataValues);
+  })
+  .catch(error => {
+    console.error('Error synchronizing database: ', error);
+  })
