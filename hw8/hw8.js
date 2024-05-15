@@ -23,13 +23,13 @@ class Book {
    * @param {string} genre - The genre of the book.
    */
   constructor(title, author, isbn, price, availability, pages, language, genre) {
-    this._title = title,
-    this._author = author,
-    this._isbn = isbn,
-    this._price = price,
-    this._availability = availability,
-    this._pages = pages,
-    this._language = language,
+    this._title = title
+    this._author = author
+    this._isbn = isbn
+    this._price = price
+    this._availability = availability
+    this._pages = pages
+    this._language = language
     this._genre = genre
   }
 
@@ -102,8 +102,8 @@ class User {
    * @param {string} email - The email of the user.
    */
   constructor(id, name, email) {
-    this._id = id,
-    this._name = name,
+    this._id = id
+    this._name = name
     this._email = email
   }
 
@@ -391,8 +391,8 @@ class Bookstore {
    * @param {string} location - The location of the bookstore
    */
   constructor(name, location) {
-    this._name = name,
-    this._location = location,
+    this._name = name
+    this._location = location
     this._inventory = []
   }
 
