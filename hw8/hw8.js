@@ -333,48 +333,6 @@ console.log(cartKaren);
 console.log(cartKaren.totalPrice());
 
 /*
-### **Part 4: Documentation**
-
-1. **Documentation**: Provide clear and concise comments and documentation for your code. Explain the purpose of each class, method, and property. Describe the interaction between different objects and how encapsulation is maintained.
-*/
-
-/*
-### **Submission**
-
-Submit your JavaScript program along with detailed documentation and comments that explain your code. Ensure that your code is well-structured and adheres to best practices in object-oriented programming.
-
-### **Example**
-
-Here's a simplified example structure to give you an idea of what your code might look like:
-
-class Book {
-  constructor(title, author, isbn, price, availability) {
-    // Properties and methods...
-  }
-}
-
-class User {
-  constructor(name, email, userId) {
-    // Properties and methods...
-  }
-}
-
-class Cart {
-  constructor(user) {
-    // Properties and methods...
-  }
-}
-
-class Order {
-  constructor(user, books) {
-    // Properties and methods...
-  }
-}
-
-// Instantiate objects and simulate bookstore interactions...
-*/
-
-/*
 ### **Bonus (Optional)**
 
 Implement additional features such as searching for books, applying discounts, handling payments, or integrating a database to store book and user information.
