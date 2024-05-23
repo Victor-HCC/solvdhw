@@ -38,12 +38,50 @@ class Node {
     }
   }
 
+  /**
+   * Inserts a new value into the binary tree rooted at this node.
+   * @param {*} value - The value to be inserted.
+   */
+  insert(value) {
+    if(value < this.value) {
+      if(this.left === null) {
+        this.left = new Node(value)
+      } else {
+        this.left.insert(value)
+      }
+    } else if(value > this.value) {
+      if(this.right === null) {
+        this.right = new Node(value)
+      } else {
+        this.right.insert(value)
+      }
+    } else {
+      console.log(`The value ${value} is already added.`);
+    }
+  }
+
+  /**
+   * Searches for a value in the binary tree rooted at this node.
+   * @param {*} value - The value to search for.
+   * @returns {Node|null} - The node containing the value if found, otherwise null.
+   */
+  search(value) {
+    if(this.value === value) {
+      return this
+    } else if(this.value > value && this.left !== null) {
+      return this.left.search(value)
+    } else if(this.value < value && this.right !== null) {
+      return this.right.search(value)
+    } else {
+      return null // Value not found
+    }
+  }
 }
 
 /**
- * Represents a binary tree.
+ * Represents a binary search tree.
  */
-class BinaryTree {
+class BinarySearchTree {
   constructor() {
     this._root = null
   }
@@ -62,67 +100,32 @@ class BinaryTree {
   }
 
   /**
-   * Inserts a new value into the binary tree.
+   * Inserts a new value into the binary search tree.
    * @param {*} value - The value to be inserted.
    */
   insert(value) {
-    const newNode = new Node(value)
     if(this._root === null) {
-      this._root = newNode
-      return;
-    }
-
-    const queue = [this.root]
-    while(queue.length > 0) {
-      const current = queue.shift()
-
-      if(current.left === null) {
-        current.left = newNode
-        return;
-      } else {
-        queue.push(current.left)
-      }
-
-      if(current.right === null) {
-        current.right = newNode
-        return;
-      } else {
-        queue.push(current.right)
-      }
+      this._root = new Node(value)
+    } else {
+      this._root.insert(value);
     }
   }
   
   /**
-   * Searches for a value in the binary tree.
+   * Searches for a value in the binary search tree.
    * @param {*} value - The value to search for.
    * @returns {Node|null} - The node containing the value if found, otherwise null.
    */
   search(value) {
     if(this._root === null) {
       return null
+    } else {
+      return this._root.search(value)
     }
-
-    const queue = [this.root]
-    while(queue.length > 0) {
-      const current = queue.shift()
-      if(current.value === value) {
-        return current
-      }
-
-      if(current.left !== null) {
-        queue.push(current.left)
-      }
-
-      if(current.right !== null) {
-        queue.push(current.right)
-      }
-    }
-
-    return null //Value not found
   }
 
   /**
-   * Traverses the binary tree in in-order.
+   * Traverses the binary search tree in in-order.
    * @param {Node} node - The current node being visited (default is the root).
    * @param {Array} result - An array to store the traversal result (default is an empty array).
    * @returns {Array} - The result of the in-order traversal.
@@ -137,7 +140,7 @@ class BinaryTree {
   }
 
   /**
-   * Traverses the binary tree in pre-order.
+   * Traverses the binary search tree in pre-order.
    * @param {Node} node - The current node being visited (default is the root).
    * @param {Array} result - An array to store the traversal result (default is an empty array).
    * @returns {Array} - The result of the pre-order traversal.
@@ -152,7 +155,7 @@ class BinaryTree {
   }
 
   /**
-   * Traverses the binary tree in post-order.
+   * Traverses the binary search tree in post-order.
    * @param {Node} node - The current node being visited (default is the root).
    * @param {Array} result - An array to store the traversal result (default is an empty array).
    * @returns {Array} - The result of the post-order traversal.
@@ -168,5 +171,5 @@ class BinaryTree {
 
 }
 
-// Export the BinaryTree class
-module.exports = BinaryTree
+// Export the BinarySearchTree class
+module.exports = BinarySearchTree

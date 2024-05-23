@@ -1,57 +1,74 @@
+/**
+ * Represents a single node in a linked list.
+ */
 class Node {
   constructor(value) {
     this._value = value
     this._next = null
   }
 
+  // Getter for the value of the node
   get value() {
     return this._value
   }
 
+  // Setter for the value of the node
   set value(value) {
     this._value = value
   }
 
+  // Getter for the next node in the linked list
   get next() {
     return this._next
   }
 
+  // Setter for the next node in the linked list
   set next(node) {
     this._next = node
   }
-
 }
 
+/**
+ * Represents a linked list data structure.
+ */
 class LinkedList {
   constructor() {
     this._head = null
     this._tail = null
   }
 
+  // Getter for the head of the linked list
   get head() {
     return this._head
   }
 
+  // Setter for the head of the linked list
   set head(node) {
-    if(node instanceof Node || null) {
+    if(node instanceof Node || node === null) {
       this._head = node
     } else {
       throw new Error('The node must be an instance of Node or null.')
     }
   }
 
+  // Getter for the tail of the linked list
   get tail() {
     return this._tail
   }
 
+  // Setter for the tail of the linked list
   set tail(node) {
-    if(node instanceof Node || null) {
+    if(node instanceof Node || node === null) {
       this._tail = node
     } else {
       throw new Error('The node must be an instance of Node or null.')
     }
   }
 
+  /**
+   * Inserts a new node with the given value at the end of the linked list.
+   * @param {*} value - The value to be inserted.
+   */
   insert(value) {
     const newNode = new Node(value)
 
@@ -64,8 +81,12 @@ class LinkedList {
     }
   }
 
+  /**
+   * Deletes the first occurrence of a node with the given value from the linked list.
+   * @param {*} value - The value to be deleted.
+   */
   delete(value) {
-    if (!this.head) {
+    if(!this.head) {
       return
     }
 
@@ -91,6 +112,11 @@ class LinkedList {
     }
   }
 
+  /**
+   * Searches for a node with the given value in the linked list.
+   * @param {*} value - The value to be searched.
+   * @returns {Node|string} - The found node or a message indicating the value was not found.
+   */
   search(value) {
     let current = this.head
     while(current !== null) {
@@ -102,14 +128,5 @@ class LinkedList {
   }
 }
 
-const list = new LinkedList()
-list.insert(2)
-list.insert(4)
-list.insert(6)
-list.insert(7)
-list.insert(10)
-list.insert(11)
-console.log(list);
-console.log(list.search(7));
-list.delete(11)
-console.log(list);
+// Export the LinkedList class
+module.exports = LinkedList
