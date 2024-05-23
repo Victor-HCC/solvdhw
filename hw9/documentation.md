@@ -47,6 +47,10 @@ The Recognition of BST algorithm checks whether a given binary tree satisfies th
 
 Breadth-First Search is an algorithm for traversing or searching tree or graph data structures. It starts at the root (or any arbitrary node for graphs) and explores all the neighbor nodes at the present depth prior to moving on to the nodes at the next depth level. BFS is commonly used to find the shortest path between two nodes in an unweighted graph.
 
+### Dijkstra's Algorithm
+
+Dijkstra's Algorithm is used to find the shortest path between two nodes in a graph with non-negative edge weights. It maintains a set of unvisited nodes and iteratively selects the node with the smallest known distance, updating the shortest distances to its neighbors until the target node is reached or all nodes are visited. This algorithm ensures that the shortest path from the starting node to any other node is found efficiently.
+
 ### Floyd's Cycle Detection Algorithm
 
 Floyd's Cycle Detection Algorithm, also known as the Tortoise and Hare algorithm, is used to detect cycles in a linked list. It employs two pointers, a slow pointer (tortoise) and a fast pointer (hare), to traverse the list. If there is a cycle, the two pointers will eventually meet.
@@ -72,6 +76,17 @@ Finds the shortest path between two nodes in a graph using Breadth-First Search 
 - Returns the shortest distance between the nodes or 'No path' if no path exists.
 
 Algorithm Time Complexity: O(V + E), where V is the number of vertices and E is the number of edges in the graph.
+
+### `shortestPathDijkstra(graph, nodeA, nodeB)`
+
+Finds the shortest path between two nodes in a weighted graph using Dijkstra's Algorithm.
+
+- `graph`: The graph object containing the adjacency list representation. Each node points to an object where keys are neighboring nodes and values are edge weights.
+- `nodeA`: The starting node.
+- `nodeB`: The target node.
+- Returns an array representing the shortest path from nodeA to nodeB. If no path exists, returns an empty array.
+
+Algorithm Time Complexity: O(V^2), where V is the number of vertices in the graph. This can be improved to O((V + E) log V) with a priority queue.
 
 ### `hasCycle(list)`
 
