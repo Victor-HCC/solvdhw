@@ -6,7 +6,8 @@
 2. [Key Components](#key-components)
 3. [Error Handling](#error-handling)
 4. [Tests](#tests)
-5. [Reflection](#reflection)
+5. [Class Implementation](#class-implementation)
+6. [Reflection](#reflection)
 
 ## Overview
 
@@ -30,9 +31,15 @@ This project involves implementing a custom JSON parser in JavaScript, leveragin
 
 - The parser is designed to catch and throw meaningful syntax errors for various issues, such as unexpected tokens, unexpected end of input, and improper formatting of JSON components. This ensures robust error reporting and helps in debugging malformed JSON strings.
 
-## Tests
+### Tests
 
 Some test cases were implemented in the corresponding file `test.js` to ensure the functionality and robustness of the `myJSONParse` function.
+
+### Class Implementation
+
+In the folder `class`, the `JSONParser` class encapsulates the parsing logic and provides a structured approach to handling JSON tokenization and parsing.
+- `Static Methods`: The methods are static because they don't depend on an instance of the class. This design choice allows the methods to be called directly on the class itself, facilitating utility-style usage.
+- `Tests`: The implementation has the same test cases as the previous version, located in the corresponding file `test.js`, ensuring that all functionality remains consistent and robust.
 
 ### Reflection
 
