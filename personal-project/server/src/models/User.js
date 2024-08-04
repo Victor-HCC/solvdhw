@@ -2,18 +2,18 @@ const pool = require('../db')
 const bcrypt = require('bcryptjs')
 
 class User {
-  constructor(id, username, password, email) {
+  constructor(id, username, password, role) {
     this.id = id
     this.username = username
     this.password = password
-    this.email = email
+    this.role = role
   }
 
-  static async create({ username, password, email }) {
+  static async create({ username, password }) {
     const hashedPassword = await bcrypt.hash(password, 10)
     const result = await pool.query(
-      `INSERT INTO users (username, password, email) VALUES ($1, $2, $3) RETURNING *`,
-      [username, hashedPassword, email]
+      `INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *`,
+      [username, hashedPassword]
     )
 
     return new User(...Object.values(result.rows[0]))
@@ -33,6 +33,10 @@ class User {
     if(result.rows.length === 0) return null
 
     return new User(...Object.values(result.rows[0]))
+  }
+
+  async isPasswordCorrect(password) {
+    return await bcrypt.compare(password, this.password)
   }
 }
 
