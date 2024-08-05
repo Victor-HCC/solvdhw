@@ -8,8 +8,7 @@
 4. [API Documentation](#api-documentation)
 -    4.1. [Login Endpoint](#login-endpoint)
 -    4.2. [Employee Endpoints](#employee-endpoints)
--    4.3. [Manager Endpoints](#manager-endpoints)
--    4.4. [Admin Endpoints](#admin-endpoints)
+-    4.3. [Admin Endpoints](#admin-endpoints)
 5. [Install](#install)
 6. [Run](#run)
 
@@ -46,46 +45,67 @@ curl -X 'POST' \\
 -  **Response**
 ```bash
 {
-  "username": "username"
+  "employeeData": "employeeData",
+  "role": "role",
+  "token": "token"
+
 }
 ```
 ### Employee Endpoints
-### api/v1/employee/leave-balance
+### api/v1/employee/leave-balance/:employeeId
 
-- GET `api/v1/employee/leave-balance` - get leave balance for the logged-in employee.
+- GET `api/v1/employee/leave-balance/:employeeId` - get leave balance for the logged-in employee.
   -  Server should answer with response 200 and the information of the leave balance.
 #### Example of response
 
 ```json
-{
-  "employeeId": 123,
-  "name": "John Doe",
-  "annualLeaveDays": 10.25,
-  "sickLeaveDays": 5.0,
-  "unpaidLeaveDays": 0.0,
-  "lastAccrualDate": "2024-05-01"
-}
+[
+  {
+    "id": 57,
+    "employeeId": 9,
+    "leaveTypeId": 1,
+    "nameLeaveType": "Vacation Leave",
+    "balance": 15
+  },
+  {
+    "id": 58,
+    "employeeId": 9,
+    "leaveTypeId": 2,
+    "nameLeaveType": "Sick Leave",
+    "balance": 10
+  },
+  ...
+]
 ```
 
-### api/v1/employee/request-leave
+### api/v1/employee/leave-request
 
-- POST `api/v1/employee/request-leave` - Request leave.
+- POST `api/v1/employee/leave-request` - Request leave.
   -  Server should answer with response 201 and newly created record.
 
 #### Example of request
 ```json
 {
-  "leaveType": "annual",  // Type of leave: "annual", "sick", or "unpaid"
-  "startDate": "2024-06-10",  // Start date of the leave
-  "endDate": "2024-06-14",    // End date of the leave
-  "reason": "Family vacation" // Reason for the leave request
+  "employeeId": "9", // Id of the employee
+  "startDate": "2024-08-22", // Start date of the leave
+  "endDate": "2024-08-26", // End date of the leave
+  "leaveTypeId": "1", // Id of the leave type
+  "reason": "Vacations" // Reason for the leave request
 }
 ```
 #### Response
 ```json
 {
-  "message": "Leave request submitted successfully",
-  "requestId": 456
+  "id": 16, // Id of the leave request
+  "employeeId": 9, // Id of the employee
+  "startDate": "2024-08-22T03:00:00.000Z", // Start date of the leave
+  "endDate": "2024-08-26T03:00:00.000Z", // End date of the leave
+  "leaveTypeId": 1, // Id of the leave type
+  "status": "pending", // Status of the request
+  "reason": "Vacations", // Reason for the leave request
+  "requestedAt": "2024-08-05T00:23:58.616Z", // Date of the application of leave request
+  "approvedAt": null, 
+  "rejectedAt": null
 }
 ```
 
@@ -120,227 +140,129 @@ curl -X 'POST' \\
 
 ```
 
-### Manager Endpoints
-
-### /api/v1/manager/pending-requests
-
-- GET `/api/v1/manager/pending-requests` - Get all pending leave requests for approval.
-  -  Server should answer with response 200 and the list of pending requests.
-
-#### Response
-```json
-{
-  "pendingRequests": [
-    {
-      "requestId": 103,
-      "employeeId": 124,
-      "employeeName": "Jane Smith",
-      "leaveType": "annual",
-      "startDate": "2024-07-01",
-      "endDate": "2024-07-10",
-      "reason": "Summer vacation",
-      "status": "Pending"
-    },
-    {
-      "requestId": 104,
-      "employeeId": 125,
-      "employeeName": "Bob Johnson",
-      "leaveType": "sick",
-      "startDate": "2024-07-05",
-      "endDate": "2024-07-08",
-      "reason": "Medical procedure",
-      "status": "Pending"
-    }
-  ]
-}
-```
-
-### /api/v1/manager/approve-leave/:id
-
-- POST `/api/v1/manager/approve-leave/:id` - Approve a leave request.
-  -  Server should answer with response 200 and the the updated leave request.
-
-#### Response
-```json
-{
-  "message": "Leave request approved successfully",
-  "requestId": 103,
-  "status": "Approved"
-}
-```
-### /api/v1/manager/reject-leave/:id
-
-- POST `/api/v1/manager/reject-leave/:id` - Reject a leave request.
-  -  Server should answer with response 200 and the the updated leave request.
-
-#### Response
-```json
-{
-  "message": "Leave request rejected successfully",
-  "requestId": 103,
-  "status": "Rejected"
-}
-```
-
 ### Admin Endpoints
 
 ### /api/v1/admin/add-employee
 
-- POST `/api/v1/admin/add-employee`- Add a new employee.
-  -  Server should answer with response 201 and the newly created employee record.
+- POST `/api/v1/admin/add-employee` - Adds a new employee.
+  -  Server should answer with response 201 and the new employee created.
 
 #### Example of request
 ```json
 {
-  "name": "Alice Johnson",
-  "email": "alice.johnson@example.com",
-  "position": "Software Engineer",
-  "annualLeaveDays": 0,
-  "sickLeaveDays": 0,
-  "unpaidLeaveDays": 0
+  "name": "John", // Name of the employee
+  "email": "john@gmail.com", // Email of the employee
+  "password": "123456", // Password for the employee
+  "departmentId": "1" // Id of the department of the employee
 }
 ```
-
 #### Response
 ```json
 {
-  "message": "Employee added successfully",
-  "employee": {
-    "employeeId": 126,
-    "name": "Alice Johnson",
-    "email": "alice.johnson@example.com",
-    "position": "Software Engineer",
-    "annualLeaveDays": 0,
-    "sickLeaveDays": 0,
-    "unpaidLeaveDays": 0
-  }
+  "id": 1,
+  "name": "John",
+  "email": "john@gmail.com",
+  "departmentId": 1,
+  "userId": 1,
+  "hireDate": "2024-08-04T03:00:00.000Z"
 }
 ```
 
-### /api/v1/admin/edit-employee/:id
+### /api/v1/admin/leave-requests
 
-- PUT `/api/v1/admin/edit-employee/:id`- Edit employee details.
-  -  Server should answer with response 200 and the updated employee record.
-
-#### Example of request
-```json
-{
-  "name": "Alice Johnson",
-  "email": "alice.j@example.com",
-  "position": "Senior Software Engineer",
-  "annualLeaveDays": 20,
-  "sickLeaveDays": 12,
-  "unpaidLeaveDays": 0
-}
-```
-
+- GET `/api/v1/admin/leave-requests?page=#&limit=#` - Get all leave requests.
+  -  Server should answer with response 200 and the list of requests.
+  -  Query parameters:
+     -  `page`: Specifies the page number of results to retrieve.
+     -  `limit`: Specifies the number of requests per page.
 #### Response
 ```json
 {
-  "message": "Employee details updated successfully",
-  "employee": {
-    "employeeId": 126,
-    "name": "Alice Johnson",
-    "email": "alice.j@example.com",
-    "position": "Senior Software Engineer",
-    "annualLeaveDays": 20,
-    "sickLeaveDays": 12,
-    "unpaidLeaveDays": 0
-  }
-}
-```
-
-### /api/v1/admin/delete-employee/:id
-
-- DELETE `/api/v1/admin/delete-employee/:id`- Delete an employee.
-  -  Server should answer with response 200 and a confirmation message.
-
-#### Response
-```json
-{
-  "message": "Employee deleted successfully",
-  "employeeId": 126
-}
-```
-
-### /api/admin/set-leave-policy
-
-- POST `/api/admin/set-leave-policy`- Define leave policies.
-  -  Server should answer with response 201 and the newly set leave policy.
-
-#### Example of request
-```json
-{
-  "annualLeaveDays": 20,
-  "sickLeaveDays": 10,
-  "unpaidLeaveDays": 5
-}
-```
-
-#### Response
-```json
-{
-  "message": "Leave policy set successfully",
-  "leavePolicy": {
-    "annualLeaveDays": 20,
-    "sickLeaveDays": 10,
-    "unpaidLeaveDays": 5
-  }
-}
-```
-
-### /api/v1/admin/employee-leave-summary
-
-- GET `/api/v1/admin/employee-leave-summary` - Get a summary of leave balances for all employees.
-  -  Server should answer with response 200 and the summary of leave balances.
-
-#### Response
-```json
-{
-  "leaveSummary": [
+  "leaveRequests": [
     {
-      "employeeId": 123,
-      "employeeName": "John Doe",
-      "annualLeaveDays": 10.25,
-      "sickLeaveDays": 5.0,
-      "unpaidLeaveDays": 0.0
+      "id": 6,
+      "employeeId": 1,
+      "startDate": "2024-09-09T03:00:00.000Z",
+      "endDate": "2024-09-10T03:00:00.000Z",
+      "leaveTypeId": 1,
+      "status": "approved",
+      "reason": "Vacations",
+      "requestedAt": "2024-08-01T19:02:58.646Z",
+      "approvedAt": "2024-08-04T23:24:24.388Z",
+      "rejectedAt": null
     },
-    {
-      "employeeId": 124,
-      "employeeName": "Jane Smith",
-      "annualLeaveDays": 15.5,
-      "sickLeaveDays": 3.0,
-      "unpaidLeaveDays": 2.0
-    }
-  ]
+    // More leave requests
+  ],
+  "totalCount": 15,
+  "page": 1,
+  "limit": 10
 }
 ```
 
-### /api/v1/admin/update-leave-balance/:id
+### /api/v1/admin/leave-requests/:id
 
-- POST `/api/v1/admin/update-leave-balance/:id`- Update the leave balance for a specific employee.
-  -  Server should answer with response 200 and the updated leave balance.
+- POST `/api/v1/admin/leave-requests/:id` - Approve or reject a leave request.
+  -  Server should answer with response 200 and the the updated leave request.
 
 #### Example of request
 ```json
 {
-  "annualLeaveDays": 12.5,
-  "sickLeaveDays": 6.0,
-  "unpaidLeaveDays": 1.0
+  "status": "approved" // approved o rejected status
 }
 ```
-
 #### Response
 ```json
 {
-  "message": "Leave balance updated successfully",
-  "employeeId": 123,
-  "annualLeaveDays": 12.5,
-  "sickLeaveDays": 6.0,
-  "unpaidLeaveDays": 1.0
+  "id": 7,
+  "employeeId": 2,
+  "startDate": "2024-09-09T03:00:00.000Z",
+  "endDate": "2024-09-10T03:00:00.000Z",
+  "leaveTypeId": 1,
+  "status": "approved",
+  "reason": "Vacations",
+  "requestedAt": "2024-08-01T19:03:01.897Z",
+  "approvedAt": "2024-08-05T00:20:59.384Z",
+  "rejectedAt": null
 }
 ```
 
-## Install
+### /api/v1/admin/leave-requests/status/:status
 
-## Run
+- GET `/api/v1/admin/leave-requests/status/:status` - Get requests by status ('approved', 'rejected', 'pending').
+  -  Server should answer with response 200 and the list of requests.
+#### Response
+```json
+[
+  {
+    "id": 2,
+    "employeeId": 2,
+    "startDate": "2024-08-22T03:00:00.000Z",
+    "endDate": "2024-08-26T03:00:00.000Z",
+    "leaveTypeId": 1,
+    "status": "pending",
+    "reason": "Vacations",
+    "requestedAt": "2024-08-01T19:02:10.283Z",
+    "approvedAt": null,
+    "rejectedAt": null
+  },
+  {
+    "id": 3,
+    "employeeId": 3,
+    "startDate": "2024-08-22T03:00:00.000Z",
+    "endDate": "2024-08-26T03:00:00.000Z",
+    "leaveTypeId": 1,
+    "status": "pending",
+    "reason": "Vacations",
+    "requestedAt": "2024-08-01T19:02:15.768Z",
+    "approvedAt": null,
+    "rejectedAt": null
+  },
+  // More results with the same status
+]
+```
+
+## Install & Run
+
+```
+  docker compose up --build
+```
