@@ -1,4 +1,4 @@
-const { getLeaveBalanceByEmployeeId, createLeaveRequest } = require("../controllers/employeeControllers")
+const { getLeaveBalanceByEmployeeId, createLeaveRequest, getLeaveHistoryByEmployeeId } = require("../controllers/employeeControllers")
 
 const getLeaveBalanceHandler = async (req, res) => {
   try {
@@ -24,4 +24,15 @@ const createLeaveRequestHandler = async (req, res) => {
   
 }
 
-module.exports = { getLeaveBalanceHandler, createLeaveRequestHandler }
+const getLeaveHistoryHandler = async (req, res) => {
+  try {
+    const { employeeId } = req.params
+    const result = await getLeaveHistoryByEmployeeId(employeeId)
+
+    res.status(200).json({ employeeId, leaveHistory: result})
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+  }
+}
+
+module.exports = { getLeaveBalanceHandler, createLeaveRequestHandler, getLeaveHistoryHandler }

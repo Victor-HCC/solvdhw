@@ -1,10 +1,13 @@
 const bcrypt = require('bcryptjs')
 const pool = require('../db')
+require("dotenv").config();
+
+const { ADMIN_USER, ADMIN_PASSWORD } = process.env
 
 const createAdminUser = async () => {
   try {
-    const username = 'admin@email.com'
-    const password = '123abc'
+    const username = ADMIN_USER
+    const password = ADMIN_PASSWORD
 
     // Check if the admin already exists
     const check = await pool.query(`

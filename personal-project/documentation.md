@@ -45,8 +45,7 @@ curl -X 'POST' \\
 -  **Response**
 ```bash
 {
-  "employeeData": "employeeData",
-  "role": "role",
+  "message": "Logged in",
   "token": "token"
 
 }
@@ -109,31 +108,39 @@ curl -X 'POST' \\
 }
 ```
 
-### api/v1/employee/leave-history
+### api/v1/employee/leave-history/:employeeId
 
-- GET `/api/v1/employee/leave-history` - Get leave history for the logged-in employee.
+- GET `/api/v1/employee/leave-history/:employeeId` - Get leave history for the logged-in employee.
   -  Server should answer with response 200 and the leave history records.
 
 #### Response
 ```json
 {
-  "employeeId": 123,
+  "employeeId": "9",
   "leaveHistory": [
     {
-      "requestId": 101,
-      "leaveType": "annual",
-      "startDate": "2024-01-10",
-      "endDate": "2024-01-15",
-      "reason": "New Year vacation",
-      "status": "Approved"
+      "id": 16,
+      "leaveTypeId": 1,
+      "nameLeaveType": "Vacation Leave",
+      "startDate": "2024-08-22T03:00:00.000Z",
+      "endDate": "2024-08-26T03:00:00.000Z",
+      "status": "approved",
+      "reason": "Vacations",
+      "requestedAt": "2024-08-05T00:23:58.616Z",
+      "approvedAt": "2024-08-06T21:53:21.785Z",
+      "rejectedAt": null
     },
     {
-      "requestId": 102,
-      "leaveType": "sick",
-      "startDate": "2024-03-05",
-      "endDate": "2024-03-08",
-      "reason": "Flu",
-      "status": "Approved"
+      "id": 17,
+      "leaveTypeId": 1,
+      "nameLeaveType": "Vacation Leave",
+      "startDate": "2024-09-02T03:00:00.000Z",
+      "endDate": "2024-09-04T03:00:00.000Z",
+      "status": "pending",
+      "reason": "Vacations again",
+      "requestedAt": "2024-08-06T21:07:39.744Z",
+      "approvedAt": null,
+      "rejectedAt": null
     }
   ]
 }
@@ -152,7 +159,7 @@ curl -X 'POST' \\
 {
   "name": "John", // Name of the employee
   "email": "john@gmail.com", // Email of the employee
-  "password": "123456", // Password for the employee
+  "password": "123456", // Password for the employee (will be hashed before saving on the db)
   "departmentId": "1" // Id of the department of the employee
 }
 ```

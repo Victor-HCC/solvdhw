@@ -17,8 +17,7 @@ const login = async (req, res) => {
     
     // console.log(user);
     const token = jwt.encode({ id: user.id, employeeData, role: user.role })
-    // res.header('authorization', token).json({ message: 'Logged in'})
-    res.header('authorization', token).json({ employeeData, role: user.role, token })
+    res.header('authorization', token).json({ message: 'Logged in', token })
   } catch (error) {
     res.status(400).json({error: error.message})
   }

@@ -1,7 +1,7 @@
 const server = require('./src/server')
-const createTables = require('./src/setup')
+const dbSetup = require('./src/setup')
 
-createTables()
+dbSetup()
 const PORT = process.env.PORT || 3001
 
 server.listen(PORT, () => {

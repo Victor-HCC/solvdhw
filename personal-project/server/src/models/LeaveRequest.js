@@ -69,15 +69,38 @@ class LeaveRequest {
     return new LeaveRequest(row.id, row.employee_id, row.start_date, row.end_date, row.leave_type_id, row.status, row.reason, row.requested_at, row.approved_at, row.rejected_at)
   }
 
+  // static async findByEmployeeId(employeeId) {
+  //   const result = await pool.query(
+  //     `SELECT * FROM leave_requests WHERE employee_id = $1`,
+  //     [employeeId]
+  //   )
+
+  //   if(result.rows.length === 0) return null
+
+  //   return result.rows.map(row => new LeaveRequest(row.id, row.employee_id, row.start_date, row.end_date, row.leave_type_id, row.status, row.reason, row.requested_at, row.approved_at, row.rejected_at))
+  // }
+
   static async findByEmployeeId(employeeId) {
     const result = await pool.query(
-      `SELECT * FROM leave_requests WHERE employee_id = $1`,
+      `SELECT lr.id, lr.leave_type_id,lr.start_date, lr.end_date, lr.status, lr.reason, lr.requested_at, lr.approved_at, lr.rejected_at, lt.name AS name_leave_type
+      FROM leave_requests lr
+      JOIN leave_types lt ON lr.leave_type_id = lt.id
+      WHERE lr.employee_id = $1`,
       [employeeId]
     )
 
-    if(result.rows.length === 0) return null
-
-    return result.rows.map(row => new LeaveRequest(row.id, row.employee_id, row.start_date, row.end_date, row.leave_type_id, row.status, row.reason, row.requested_at, row.approved_at, row.rejected_at))
+    return result.rows.map(row => ({
+      id: row.id,
+      leaveTypeId: row.leave_type_id,
+      nameLeaveType: row.name_leave_type,
+      startDate: row.start_date,
+      endDate: row.end_date,
+      status: row.status,
+      reason: row.reason,
+      requestedAt: row.requested_at,
+      approvedAt: row.approved_at,
+      rejectedAt: row.rejected_at,
+    }))
   }
 
   static async findByStatus(status) {

@@ -25,4 +25,11 @@ const createLeaveRequest = async (employeeId, startDate, endDate, leaveTypeId, r
   return newLeaveRequest
 }
 
-module.exports = { getLeaveBalanceByEmployeeId, createLeaveRequest }
+const getLeaveHistoryByEmployeeId = async (employeeId) => {
+  const leaveHistory = await LeaveRequest.findByEmployeeId(employeeId)
+
+  return leaveHistory
+}
+
+
+module.exports = { getLeaveBalanceByEmployeeId, createLeaveRequest, getLeaveHistoryByEmployeeId }
