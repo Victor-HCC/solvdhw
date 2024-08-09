@@ -175,6 +175,56 @@ curl -X 'POST' \\
 }
 ```
 
+### /api/v1/admin/delete-employee/:employeeId
+
+- DELETE `/api/v1/admin/delete-employee/:employeeId` - Soft delete an employee.
+  -  Server should answer with response 200 and a success message.
+  -  The employee will be marked as inactive, preventing them from logging in, but their records will remain in the database.
+#### Response
+```json
+{
+  "message": "Employee deleted successfully."
+}
+```
+
+### /api/v1/admin/employees
+
+- GET `/api/v1/admin/employees` - Get all active employees.
+  -  Server should answer with response 200 and the list of employees.
+
+#### Response
+```json
+{
+  "employees": [
+    {
+      "id": 1,
+      "name": "john",
+      "email": "john@gmail.com",
+      "departmentId": 1,
+      "userId": 2,
+      "hireDate": "2024-08-08T03:00:00.000Z"
+    },
+    {
+      "id": 3,
+      "name": "john2",
+      "email": "john2@gmail.com",
+      "departmentId": 1,
+      "userId": 4,
+      "hireDate": "2024-08-08T03:00:00.000Z"
+    },
+    {
+      "id": 4,
+      "name": "john3",
+      "email": "john3@gmail.com",
+      "departmentId": 1,
+      "userId": 5,
+      "hireDate": "2024-08-08T03:00:00.000Z"
+    }
+  ],
+  "totalCount": 3
+}
+```
+
 ### /api/v1/admin/leave-requests
 
 - GET `/api/v1/admin/leave-requests?page=#&limit=#` - Get all leave requests.
