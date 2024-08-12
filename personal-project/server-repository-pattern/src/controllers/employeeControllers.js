@@ -10,18 +10,6 @@ const getLeaveBalanceByEmployeeId = async (employeeID) => {
   return result
 }
 
-// const createLeaveRequest = async (employeeId, startDate, endDate, leaveTypeId, reason) => {
-//   const newLeaveRequest = await LeaveRequest.create({
-//     employeeId,
-//     startDate,
-//     endDate,
-//     leaveTypeId,
-//     reason
-//   })
-
-//   return newLeaveRequest
-// }
-
 const createLeaveRequest = async (employeeId, startDate, endDate, leaveTypeId, reason) => {
   const newLeaveRequest = await leaveRequestRepository.create({employeeId, startDate, endDate, leaveTypeId, reason})
 

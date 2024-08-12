@@ -225,6 +225,23 @@ curl -X 'POST' \\
 }
 ```
 
+### /api/v1/admin/employees/:employeeId
+
+- GET `/api/v1/admin/employees/:employeeId` - Gets data of the employee with the provided id.
+  -  Server should answer with response 200 and the data of the employee.
+
+#### Response
+```json
+{
+  "id": 1,
+  "name": "john",
+  "email": "john@gmail.com",
+  "departmentId": 1,
+  "userId": 2,
+  "hireDate": "2024-08-08T03:00:00.000Z"
+}
+```
+
 ### /api/v1/admin/leave-requests
 
 - GET `/api/v1/admin/leave-requests?page=#&limit=#` - Get all leave requests.

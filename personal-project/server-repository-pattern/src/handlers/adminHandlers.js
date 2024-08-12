@@ -1,4 +1,4 @@
-const { createUserAndEmployee, getAllEmployees, getAllLeaveRequests, updateLeaveRequest, getRequestsByStatus, deleteEmployee } = require("../controllers/adminControllers")
+const { createUserAndEmployee, getAllEmployees, getAllLeaveRequests, updateLeaveRequest, getRequestsByStatus, deleteEmployee, getEmployeeById } = require("../controllers/adminControllers")
 
 const addEmployeeHandler = async (req, res) => {
   try {
@@ -13,6 +13,18 @@ const addEmployeeHandler = async (req, res) => {
 
 const getEmployeesHandler = async (req, res) => {
   try {
+    const { employeeId } = req.params
+    
+    if(employeeId) {
+      const employee = await getEmployeeById(employeeId)
+      
+      if(employee) {
+        return res.status(200).json(employee)
+      } else {
+        return res.status(404).json({ message: 'Employee not found.'})
+      }
+    }
+
     const employees = await getAllEmployees()
     
     res.status(200).json(employees)

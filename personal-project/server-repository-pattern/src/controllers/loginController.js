@@ -12,12 +12,13 @@ const login = async (req, res) => {
     const { username, password } = req.body
 
     const user = await userService.findUserByUsername(username)
+    
     if(!user) return res.status(400).json({ message: 'Invalid credentials'})
     
     const validPass = await userService.isPasswordCorrect(username, password)
     if(!validPass) return res.status(400).json({ message: 'Invalid credential'})
 
-    const employeeData = await employeeRepository.findByUserId(user.id)
+    const employeeData = user.role === 'admin' ? null : await employeeRepository.findByUserId(user.id)
     
     // console.log(user);
     const token = jwt.encode({ id: user.id, employeeData, role: user.role })

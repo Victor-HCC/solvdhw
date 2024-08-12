@@ -1,4 +1,5 @@
 const pool = require("../db");
+const { cleanLeaveRequestData } = require("../utils/dataCleaners");
 const LeaveRequestRepository = require("./LeaveRequestRepository");
 
 class LeaveRequestRepositoryImpl extends LeaveRequestRepository {
@@ -8,7 +9,7 @@ class LeaveRequestRepositoryImpl extends LeaveRequestRepository {
       [leaveRequest.employeeId, leaveRequest.startDate, leaveRequest.endDate, leaveRequest.leaveTypeId, leaveRequest.reason]
     )
 
-    return result.rows[0]
+    return cleanLeaveRequestData(result.rows[0])
   }
 
   async getAll(page, limit) {
@@ -25,7 +26,7 @@ class LeaveRequestRepositoryImpl extends LeaveRequestRepository {
 
     const totalCount = parseInt(totalCountResult.rows[0].count, 10)
 
-    return { leaveRequests: result.rows, totalCount }
+    return { leaveRequests: result.rows.map(cleanLeaveRequestData), totalCount }
   }
 
   async findById(id) {
@@ -36,7 +37,7 @@ class LeaveRequestRepositoryImpl extends LeaveRequestRepository {
 
     if(result.rows.length === 0) return null
 
-    return result.rows[0]
+    return cleanLeaveRequestData(result.rows[0])
   }
 
   async findByEmployeeId(employeeId) {
@@ -70,7 +71,7 @@ class LeaveRequestRepositoryImpl extends LeaveRequestRepository {
 
     if(result.rows.length === 0) return null
 
-    return result.rows
+    return result.rows.map(cleanLeaveRequestData)
   }
 
   async updateStatus(id, status) {
@@ -79,7 +80,7 @@ class LeaveRequestRepositoryImpl extends LeaveRequestRepository {
       [id, status]
     )
 
-    return result.rows[0]
+    return cleanLeaveRequestData(result.rows[0])
   }
 
   async deleteById(id) {

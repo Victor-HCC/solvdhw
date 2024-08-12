@@ -16,7 +16,7 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
   async findById(id) {
     const result = await pool.query(`SELECT * FROM employees WHERE id = $1`, [id])
     
-    return result.rows[0]
+    return cleanEmployeeData(result.rows[0])
   }
 
   async update(id, fields) {
@@ -66,7 +66,7 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
   async findByUserId(userId) {
     const result = await pool.query(`SELECT * FROM employees WHERE user_id = $1`, [userId])
 
-    return result.rows[0]
+    return cleanEmployeeData(result.rows[0])
   }
 }
 

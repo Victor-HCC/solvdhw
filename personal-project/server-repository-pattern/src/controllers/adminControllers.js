@@ -1,11 +1,11 @@
 const UserService = require('../services/UserService')
-const EmployeeRepositoryImpl = require('../repositories/EmployeeRepositoryImpl')
+const EmployeeRepository = require('../repositories/EmployeeRepositoryImpl')
 const LeaveTypeRepository = require('../repositories/LeaveTypeRepositoryImpl')
 const LeaveBalanceRepository = require('../repositories/LeaveBalanceRepositoryImpl')
 const LeaveRequestRepository = require('../repositories/LeaveRequestRepositoryImpl')
 const { getWorkingDays } = require('../utils/daysCounter')
 
-const employeeRepository = new EmployeeRepositoryImpl()
+const employeeRepository = new EmployeeRepository()
 const leaveTypeRepository = new LeaveTypeRepository()
 const leaveBalanceRepository = new LeaveBalanceRepository()
 const leaveRequestRepository = new LeaveRequestRepository()
@@ -32,7 +32,7 @@ const createUserAndEmployee = async (name, email, password, departmentId) => {
     await leaveBalanceRepository.create({
       employeeId: newEmployee.id,
       leaveTypeId: type.id,
-      balance: type.max_days_per_year
+      balance: type.maxDaysPerYear
     })
   }
 
@@ -43,25 +43,23 @@ const getAllEmployees = async () => {
   return await employeeRepository.getAll()
 }
 
+const getEmployeeById = async (id) => {
+  return await employeeRepository.findById(id)
+}
+
 const getAllLeaveRequests = async (page, limit) => {
   const { leaveRequests, totalCount } = await leaveRequestRepository.getAll(page, limit)
 
   return { leaveRequests, totalCount, page, limit }
 }
 
-// const updateLeaveRequest = async (id, status, timestampColumn) => {
-//   const updateRequest = await LeaveRequest.updateStatus(id, status, timestampColumn)
-
-//   return updateRequest
-// }
-
 const updateLeaveRequest = async (id, status) => {
   const updatedRequest = await leaveRequestRepository.updateStatus(parseInt(id), status)
 
   if(status === 'approved') {
-    const days = getWorkingDays(updatedRequest.start_date, updatedRequest.end_date)
+    const days = getWorkingDays(updatedRequest.startDate, updatedRequest.endDate)
     // console.log(updatedRequest, 'days:', days);
-    await leaveBalanceRepository.decreaseLeaveBalance(updatedRequest.employee_id, updatedRequest.leave_type_id, days)
+    await leaveBalanceRepository.decreaseLeaveBalance(updatedRequest.employeeId, updatedRequest.leaveTypeId, days)
   }
 
   return updatedRequest
@@ -70,13 +68,13 @@ const updateLeaveRequest = async (id, status) => {
 const getRequestsByStatus = async (status) => {
   const leaveRequests = await leaveRequestRepository.findByStatus(status)
 
-  return leaveRequests ? leaveRequests : {}
+  return leaveRequests ? leaveRequests : []
 }
 
 const deleteEmployee = async (id) => {
   const employee = await employeeRepository.findById(id)
   
-  return userService.softDeleteUser(employee.user_id)
+  return userService.softDeleteUser(employee.userId)
 }
 
 module.exports = { createUserAndEmployee, 
@@ -84,5 +82,6 @@ module.exports = { createUserAndEmployee,
   updateLeaveRequest, 
   getRequestsByStatus, 
   deleteEmployee,
-  getAllEmployees
+  getAllEmployees,
+  getEmployeeById
 }

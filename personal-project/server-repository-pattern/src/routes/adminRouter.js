@@ -3,7 +3,7 @@ const { addEmployeeHandler, getLeaveRequestsHandler, updateLeaveRequestHandler, 
 const adminRouter = Router()
 
 adminRouter.post('/add-employee', addEmployeeHandler)
-adminRouter.get('/employees', getEmployeesHandler)
+adminRouter.get('/employees/:employeeId?', getEmployeesHandler)
 adminRouter.get('/leave-requests', getLeaveRequestsHandler)
 adminRouter.patch('/leave-requests/:id', updateLeaveRequestHandler)
 adminRouter.get('/leave-requests/status/:status', getRequestsByStatusHandler)
