@@ -11,7 +11,7 @@ const port = parseInt(DB_PORT, 10)
 
 const pool = new Pool({
   user: DB_USER,
-  host: HOST,
+  host: DB_HOST,
   database: DB_NAME,
   password: DB_PASSWORD,
   port

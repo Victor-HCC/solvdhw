@@ -77,15 +77,14 @@ curl -X 'POST' \\
 ]
 ```
 
-### api/v1/employee/leave-request
+### api/v1/employee/leave-request/:employeeId
 
-- POST `api/v1/employee/leave-request` - Request leave.
+- POST `api/v1/employee/leave-request/:employeeId` - Request leave.
   -  Server should answer with response 201 and newly created record.
 
 #### Example of request
 ```json
 {
-  "employeeId": "9", // Id of the employee
   "startDate": "2024-08-22", // Start date of the leave
   "endDate": "2024-08-26", // End date of the leave
   "leaveTypeId": "1", // Id of the leave type
