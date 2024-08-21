@@ -62,7 +62,7 @@ class CustomJWT {
         throw new Error('JWT authentication failed');
       }
     } catch (err) {
-      console.error((err as Error).message);
+      throw new Error((err as Error).message);
       return false;
     }
   }

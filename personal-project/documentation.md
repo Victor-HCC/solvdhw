@@ -115,7 +115,7 @@ curl -X 'POST' \\
 #### Response
 ```json
 {
-  "employeeId": "9",
+  "employeeId": 9,
   "leaveHistory": [
     {
       "id": 16,
@@ -274,7 +274,7 @@ curl -X 'POST' \\
 
 ### /api/v1/admin/leave-requests/:id
 
-- POST `/api/v1/admin/leave-requests/:id` - Approve or reject a leave request.
+- PATCH `/api/v1/admin/leave-requests/:id` - Approve or reject a leave request.
   -  Server should answer with response 200 and the the updated leave request.
 
 #### Example of request
@@ -338,4 +338,10 @@ curl -X 'POST' \\
 
 ```
   docker compose up --build
+```
+
+## Run Tests
+
+```
+  docker compose up test
 ```

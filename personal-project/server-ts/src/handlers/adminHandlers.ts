@@ -13,14 +13,19 @@ import {
 export const addEmployeeHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const { name, email, password, departmentId } = req.body
-    const newEmployee: Employee = await createUserAndEmployee(name, email, password, departmentId)
+
+    if(name.length === 0 || email.length === 0 || password.length === 0 || departmentId.length === 0) {
+      res.status(400).json({ error: 'Some fields are empty.'})
+      return
+    }
+    const newEmployee: Employee = await createUserAndEmployee(name, email, password, parseInt(departmentId))
 
     res.status(201).json(newEmployee)
   } catch (error) {
     if (error instanceof Error) {
       res.status(400).json({ error: error.message });
     } else {
-      res.status(400).json({ error: 'An unknown error occurred at login.' });
+      res.status(400).json({ error: 'An unknown error occurred at creating new employee.' });
     }
   }
 }
@@ -36,7 +41,7 @@ export const getEmployeesHandler = async (req: Request, res: Response): Promise<
         res.status(200).json(employee)
         return
       } else {
-        res.status(404).json({ message: 'Employee not found'})
+        res.status(404).json({ message: 'Employee not found.'})
         return
       }
     }
@@ -73,8 +78,8 @@ export const getLeaveRequestHandler = async (req: Request, res: Response): Promi
 export const updateLeaveRequestHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const id = parseInt(req.params.id)
-    const { status } = req.body
-
+    const status: LeaveRequestStatus = req.body.status
+    
     const updateRequest = await updateLeaveRequest(id, status)
     res.status(200).json(updateRequest)
   } catch (error) {

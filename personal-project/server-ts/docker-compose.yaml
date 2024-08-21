@@ -43,6 +43,29 @@ services:
       - app-network
     command: ["./wait-for-it.sh", "postgres:5432", "--", "npm", "run", "start"]
 
+  test:
+    build: .
+    container_name: node_test
+    environment:
+      - NODE_ENV=test
+      - PORT=${PORT}
+      - SECRET_TOKEN=${SECRET_TOKEN}
+      - DB_HOST=${DB_HOST}
+      - DB_PORT=${DB_PORT}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    env_file:
+      - .env.test
+    depends_on:
+      - postgres
+    volumes:
+      - .:/app
+      - /app/node_modules
+    networks:
+      - app-network
+    command: ["./wait-for-it.sh", "postgres:5432", "--", "npm", "run", "test"]
+
 networks:
   app-network:
     driver: bridge

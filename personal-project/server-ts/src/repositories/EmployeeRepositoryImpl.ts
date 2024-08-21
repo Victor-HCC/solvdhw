@@ -37,16 +37,6 @@ class EmployeeRepositoryImpl extends EmployeeRepository {
 
     return cleanEmployeeData(result.rows[0])
   }
-
-  async delete(id: number): Promise<boolean> {
-    const result = await pool.query(`DELETE FROM employees WHERE id = $1 RETURNING *`, [id])
-
-    if(result.rowCount === 0) {
-      return false;
-    }
-  
-    return true;
-  }
   
   async getAll(): Promise<AllEmployees> {
     const result = await pool.query(
